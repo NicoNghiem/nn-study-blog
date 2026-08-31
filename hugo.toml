@@ -1,4 +1,4 @@
-baseURL = "https://example.com/"
+baseURL = "https://nn-study-blog.netlify.app"
 languageCode = "en-us"
 title = "Nico's Study Notes"
 theme = "blowfish"
@@ -10,6 +10,3 @@ theme = "blowfish"
   description = "Writing about what I'm learning"
   showPostSummary = true
   recentPostsCount = 10
-  
-  [params.author]
-    name = "Nico Nghiem"
