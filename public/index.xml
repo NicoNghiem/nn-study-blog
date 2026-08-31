@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Nico&#39;s Study Notes</title>
+    <link>http://localhost:1313/</link>
+    <description>Recent content on Nico&#39;s Study Notes</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>© 2026 Nico Nghiem</copyright>
+    <lastBuildDate>Sun, 30 Aug 2026 16:16:23 +0100</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Learning Something: BSP-OT</title>
+      <link>http://localhost:1313/posts/bsp-ot-a-first-look/</link>
+      <pubDate>Sun, 30 Aug 2026 16:16:23 +0100</pubDate>
+      
+      <guid>http://localhost:1313/posts/bsp-ot-a-first-look/</guid>
+      <description>&lt;p&gt;This post is the first (of hopefully many) where I will go through the steps of reading/understanding/implementing a paper I&amp;rsquo;m reading. Since I am just a mere Technical Artist (and just a Crowds peasant on top of that, not even a FX smartass!), that process will probably be quite bumpy but it might be interesting to some, or at least to me, so that I can put my thoughts in order. Expect quite a few rants about conceptual aspects I find beautiful but do not fully grasp yet. Feel free to contact me (or correct me!) any time, you know where to find me -&amp;gt; &lt;a href=&#34;mailto:niconghiem@gmail.com&#34; &gt;niconghiem@gmail.com&lt;/a&gt;&lt;/p&gt;</description>
+      
+    </item>
+    
+  </channel>
+</rss>

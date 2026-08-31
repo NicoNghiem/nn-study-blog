@@ -1,0 +1,891 @@
+<!doctype html>
+<html
+  lang="en-us"
+  dir="ltr"
+  class="scroll-smooth"
+  data-default-appearance="light"
+  data-auto-appearance="true"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  
+    <meta http-equiv="content-language" content="en-us">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color">
+
+  
+  
+    <title>Learning Something: BSP-OT &middot; Nico&#39;s Study Notes</title>
+    <meta name="title" content="Learning Something: BSP-OT &middot; Nico&#39;s Study Notes">
+  
+
+  
+  
+  
+  
+  
+    
+  
+    
+  
+    
+  
+  
+    <meta name="description" content="Writing about what I&#39;m learning">
+  
+  
+    <meta name="keywords" content="Optimal Transport,Computer Graphics,">
+  
+  
+  
+  <link rel="canonical" href="http://localhost:1313/posts/bsp-ot-a-first-look/">
+  
+  
+
+  
+  
+    <meta name="author" content="Nico Nghiem">
+  
+  
+
+  
+  <meta property="og:url" content="http://localhost:1313/posts/bsp-ot-a-first-look/">
+	<meta property="og:site_name" content="Nico&#39;s Study Notes">
+	<meta property="og:title" content="Learning Something: BSP-OT">
+	<meta property="og:description" content="This post is the first (of hopefully many) where I will go through the steps of reading/understanding/implementing a paper I’m reading. Since I am just a mere Technical Artist (and just a Crowds peasant on top of that, not even a FX smartass!), that process will probably be quite bumpy but it might be interesting to some, or at least to me, so that I can put my thoughts in order. Expect quite a few rants about conceptual aspects I find beautiful but do not fully grasp yet. Feel free to contact me (or correct me!) any time, you know where to find me -&gt; niconghiem@gmail.com">
+	<meta property="og:locale" content="en_us">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-08-30T16:16:23+01:00">
+		<meta property="article:modified_time" content="2026-08-30T16:16:23+01:00">
+		<meta property="article:tag" content="Optimal Transport">
+		<meta property="article:tag" content="Computer Graphics">
+
+  
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="Learning Something: BSP-OT">
+	<meta name="twitter:description" content="This post is the first (of hopefully many) where I will go through the steps of reading/understanding/implementing a paper I’m reading. Since I am just a mere Technical Artist (and just a Crowds peasant on top of that, not even a FX smartass!), that process will probably be quite bumpy but it might be interesting to some, or at least to me, so that I can put my thoughts in order. Expect quite a few rants about conceptual aspects I find beautiful but do not fully grasp yet. Feel free to contact me (or correct me!) any time, you know where to find me -&gt; niconghiem@gmail.com">
+
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+  
+    
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <link
+    type="text/css"
+    rel="stylesheet"
+    href="/css/main.bundle.min.049e76956e66e76b3961e116de1ff1dd04835b80cdfea2672f7c3f86daa486942635db72e3e46cf12a95c82c024105ae63c45c62c2e0e7f5099f9943bbf4e1ea.css"
+    integrity="sha512-BJ52lW5m52s5YeEW3h/x3QSDW4DN/qJnL3w/htqkhpQmNdty4&#43;Rs8SqVyCwCQQWuY8RcYsLg5/UJn5lDu/Th6g==">
+
+  
+  
+  <script
+    type="text/javascript"
+    src="/js/appearance.min.764f412f07ea715415e9123a5eb5f355429502d0b760146b9bcab854bc50829dee14488594acd935dfcdc6a0fe7e6d14d7bee914ebb9272b251aa238cb52c4dd.js"
+    integrity="sha512-dk9BLwfqcVQV6RI6XrXzVUKVAtC3YBRrm8q4VLxQgp3uFEiFlKzZNd/NxqD&#43;fm0U177pFOu5JyslGqI4y1LE3Q=="></script>
+  
+
+
+  
+  
+  
+  
+  
+  
+    
+    <script defer src="/lib/zoom/zoom.min.umd.a527109b68c082a70f3697716dd72a9d5aa8b545cf800cecbbc7399f2ca6f6e0ce3e431f2062b48bbfa47c9ea42822714060bef309be073f49b9c0e30d318d7b.js" integrity="sha512-pScQm2jAgqcPNpdxbdcqnVqotUXPgAzsu8c5nyym9uDOPkMfIGK0i7&#43;kfJ6kKCJxQGC&#43;8wm&#43;Bz9JucDjDTGNew=="></script>
+    
+    <script defer src="/js/medium-zoom.67b71ecf7eecce38673a92244d1ffd93edb5f1aeedd12e725d0f67fe901828fa3562f6a6d64ad290b36b7d7034b8ea16e63486d75d957bcf6a2732923e5d46e6.js" integrity="sha512-Z7cez37szjhnOpIkTR/9k&#43;218a7t0S5yXQ9n/pAYKPo1Yvam1krSkLNrfXA0uOoW5jSG112Ve89qJzKSPl1G5g=="></script>
+  
+  
+  
+  
+
+  
+  
+  
+    
+  
+  
+    
+    
+    
+  
+  
+  
+  
+  
+  
+  
+  
+    
+    <script
+      defer
+      type="text/javascript"
+      id="script-bundle"
+      src="/js/main.bundle.min.221b84d3b2e59e5c6a90e4478bf70f9b4fe7739e6f4ac7e3428a46067c88dc7cf4a338690c89753c16aa0600fbc156125f6f2ce34a9aa300dcc7a367f3e90e9e.js"
+      integrity="sha512-IhuE07LlnlxqkORHi/cPm0/nc55vSsfjQopGBnyI3Hz0ozhpDIl1PBaqBgD7wVYSX28s40qaowDcx6Nn8&#43;kOng=="
+      data-copy="Copy"
+      data-copied="Copied"></script>
+  
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+  
+
+  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Posts",
+    "name": "Learning Something: BSP-OT",
+    "headline": "Learning Something: BSP-OT",
+    
+    "inLanguage": "en-us",
+    "url" : "http://localhost:1313/posts/bsp-ot-a-first-look/",
+    "author" : {
+      "@type": "Person",
+      "name": "Nico Nghiem"
+    },
+    "copyrightYear": "2026",
+    "dateCreated": "2026-08-30T16:16:23\u002b01:00",
+    "datePublished": "2026-08-30T16:16:23\u002b01:00",
+    
+    "dateModified": "2026-08-30T16:16:23\u002b01:00",
+    
+    "keywords": ["Optimal Transport","Computer Graphics"],
+    
+    "mainEntityOfPage": "http://localhost:1313/posts/bsp-ot-a-first-look/",
+    "wordCount":  1680 
+  }]
+  </script>
+
+
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+</head>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <body class="flex flex-col h-screen m-auto leading-7 max-w-7xl px-6 sm:px-14 md:px-24 lg:px-32 text-lg bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral bf-scrollbar">
+    <div id="the-top" class="absolute flex self-center">
+      <a
+        class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600"
+        href="#main-content">
+        <span class="font-bold text-primary-600 pe-2 dark:text-primary-400">&darr;</span>
+        Skip to main content
+      </a>
+    </div>
+    <header>
+      
+      
+        <div class="main-menu flex items-center w-full gap-2 p-1 pl-0">
+  
+  
+    <a href="/" class="text-base font-medium truncate min-w-0 shrink">
+      Nico&rsquo;s Study Notes
+    </a>
+  
+  <div class="flex items-center ms-auto">
+    <div class="hidden md:flex">
+      <nav aria-label="Main menu" class="flex items-center gap-x-5 h-12">
+  
+
+  
+
+  
+
+  
+    <div class="flex items-center">
+      <button
+        id="appearance-switcher"
+        aria-label="Switch to dark appearance"
+        type="button"
+        class="text-sm bf-icon-color-hover"
+        title="Switch to dark appearance">
+        <div class="flex items-center justify-center dark:hidden">
+          <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span>
+        </div>
+        <div class="items-center justify-center hidden dark:flex">
+          <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span>
+        </div>
+      </button>
+    </div>
+  
+
+  
+    <button
+      id="search-button"
+      aria-label="Search (/ or ⌘K)"
+      class="flex items-center gap-2 rounded-lg border bf-border-color bf-border-color-hover bg-neutral-100/50 px-2 py-1 text-sm text-neutral-500 transition-colors hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral-400 dark:hover:text-primary-400"
+      title="Search (/ or ⌘K)">
+      <span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+      <kbd
+        id="search-shortcut-hint"
+        class="pointer-events-none font-sans text-xs text-neutral-500 dark:text-neutral-400"
+        aria-hidden="true">
+        ⌘K
+      </kbd>
+    </button>
+  
+</nav>
+
+
+
+    </div>
+    <div class="flex md:hidden">
+      
+<div class="mobile-header-row relative flex items-center h-14 gap-4">
+  
+
+  
+    <button
+      id="appearance-switcher-mobile"
+      type="button"
+      aria-label="Switch to dark appearance"
+      title="Switch to dark appearance"
+      class="flex items-center justify-center text-neutral-900 hover:text-primary-600 dark:text-neutral-200 dark:hover:text-primary-400">
+      <div class="dark:hidden">
+        <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+</span>
+      </div>
+      <div class="hidden dark:block">
+        <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+</span>
+      </div>
+    </button>
+  
+
+  
+    <button
+      id="search-button-mobile"
+      aria-label="Search (/ or ⌘K)"
+      class="flex items-center justify-center bf-icon-color-hover"
+      title="Search (/ or ⌘K)">
+      <span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+    </button>
+  
+
+  
+</div>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+      
+    </header>
+    <div class="relative flex flex-col grow">
+      <main id="main-content" class="grow">
+        
+  
+  
+  
+  
+  <article>
+    
+    
+
+    
+    <header id="single_header" class="mt-5 max-w-prose">
+      
+      <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+        Learning Something: BSP-OT
+      </h1>
+      <div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+        
+
+
+
+
+
+  
+  
+
+
+
+  
+
+  
+  
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <div class="flex flex-row flex-wrap items-center">
+    
+    
+      <time datetime="2026-08-30T16:16:23&#43;01:00">August 30, 2026</time><span class="px-2 text-primary-500">&middot;</span><span>1680 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">8 mins</span>
+    
+
+    
+    
+  </div>
+
+  
+
+  
+  
+
+
+      </div>
+      
+        
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+    
+      
+      
+<div class="flex author">
+  
+  <div class="place-self-center">
+    
+      <div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">
+        Author
+      </div>
+      <div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">
+        Nico Nghiem
+      </div>
+    
+    
+    <div class="text-2xl sm:text-lg">
+</div>
+  </div>
+</div>
+
+    
+  
+
+  
+    <div class="mb-5"></div>
+  
+
+      
+    </header>
+
+    
+    <section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row">
+      
+      
+      
+      
+      
+
+
+      <div class="min-w-0 min-h-0 max-w-fit">
+        
+
+        <div class="article-content max-w-prose mb-20">
+          <p>This post is the first (of hopefully many) where I will go through the steps of reading/understanding/implementing a paper I&rsquo;m reading. Since I am just a mere Technical Artist (and just a Crowds peasant on top of that, not even a FX smartass!), that process will probably be quite bumpy but it might be interesting to some, or at least to me, so that I can put my thoughts in order. Expect quite a few rants about conceptual aspects I find beautiful but do not fully grasp yet. Feel free to contact me (or correct me!) any time, you know where to find me -&gt; <a href="mailto:niconghiem@gmail.com" >niconghiem@gmail.com</a></p>
+<p>Today&rsquo;s topic is the BSP OT paper by Genest et al. submitted at SIGGRAPH Asia 2025, that you can find over there:  <a href="https://dl.acm.org/doi/10.1145/3763281"  target="_blank" rel="noreferrer">https://dl.acm.org/doi/10.1145/3763281</a> Our goal will be to implement a first version of the BSP-OT paper in the bijective case (which corresponds to Section 3.) I will add a full Houdini implementation on Github later on with a Houdini native approach and one using the HDK for speed.</p>
+
+<h1 class="relative group">BSP OT bijective case
+    <div id="bsp-ot-bijective-case" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#bsp-ot-bijective-case" aria-label="Anchor">#</a>
+    </span>
+    
+</h1>
+
+<h2 class="relative group">What are we trying to solve?
+    <div id="what-are-we-trying-to-solve" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#what-are-we-trying-to-solve" aria-label="Anchor">#</a>
+    </span>
+    
+</h2>
+<p>Optimal Transport is one of my favorite topics and while I&rsquo;m quite tempted to go through the Monge-Kantorovich formulation of the problem, I will keep the formulation quite pragmatic here as one of the cases presented in the paper is quite a perfect way to illustrate it and most Houdini artists will see immediately what problem we are trying to solve.</p>
+<p>Let&rsquo;s say you have two point clouds of same size and you want to find a mapping between the two of them:
+<figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="low"
+    alt="Point Clouds to Match"
+    src="/images/bsp-ot-a-first-look/point_clouds.png"
+    ></figure>
+</p>
+<p>Here is an example of what we can do if we find such a mapping:
+<figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="low"
+    alt="Point Clouds to Match"
+    src="/images/bsp-ot-a-first-look/point_clouds_morphing.gif"
+    ></figure>
+</p>
+<p>On the surface, this problem might sound a little underwhelming (and maybe even easy to solve if you&rsquo;ve never tried to solve it in practice) but it is actually quite a challenging problem that is computationally expensive to solve precisely. This belongs to a class of problems called Optimal Transport problems: the goal is to find a transport plan between two weight distributions (in our case, each point can be seen as having a weight of 1/N) There&rsquo;s quite a bunch of applications in the real world, the most infamous one being that this Optimal Transport plan induces a metric useful to measure distances between distributions (even with non-overlapping support!) which you might encounter named as the Wasserstein Distance. For more readings on the topic, I highly recommend Gabriel Peyre and Marco Cuturi&rsquo;s book on Optimal Transport <a href="https://arxiv.org/abs/1803.00567"  target="_blank" rel="noreferrer">https://arxiv.org/abs/1803.00567</a> (which I own a hard copy at home -I&rsquo;m such a fan!)</p>
+<p>For the little story, I first encountered Optimal Transport when I was still a research intern at KAIST&rsquo;s VML lab where I needed to find a distance to compare some indicators (tied to Motion Capture Data) that I stubbornly wanted to interpret as measure distributions. I ended up meeting it again a little after I joined Disney Animation, during the production of Raya: I got to talk regularly with Jake Rice about OT (I was more or less his mathematics rubber duck -fascinating experience, 100% recommend) when he was working on his Druun&rsquo;s webbing on Raya that used OT in one of its steps <a href="https://jakerice.design/2024/01/18/RayaAndTheLastDragon/"  target="_blank" rel="noreferrer">https://jakerice.design/2024/01/18/RayaAndTheLastDragon/</a></p>
+<p>Back in that time, the main algorithm we were using was Sinkhorn iterations (<a href="https://papers.nips.cc/paper_files/paper/2013/hash/af21d0c97db2e27e13572cbf59eb343d-Abstract.html"  target="_blank" rel="noreferrer">https://papers.nips.cc/paper_files/paper/2013/hash/af21d0c97db2e27e13572cbf59eb343d-Abstract.html</a>) which did not scale really well for high number of points and high precision. The research on the topic advanced quite a bit since then and the BSP-OT algorithm is such a massively convenient tools for the discrete use case that we, CG hobbyists/enthusiasts end up running into quite often!</p>
+
+<h2 class="relative group">A step back: 1D OT and sorting
+    <div id="a-step-back-1d-ot-and-sorting" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#a-step-back-1d-ot-and-sorting" aria-label="Anchor">#</a>
+    </span>
+    
+</h2>
+<p>To understand properly BSP-OT keeping constantly in mind a little fact -that is the basis of Sliced Optimal Transport- is so useful! Sliced OT is a branch of OT where we use slicing to help compute the Wasserstein distance, using one EXTREMELY important fact:</p>
+<p><strong>Computing Optimal Transport in 1D is really easy!!!</strong></p>
+<p>As a matter of fact, it almost boils down to Sorting. To convince yourself of this fact (not really a proper proof but hey!) look at this below:
+<figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="low"
+    alt="1D OT"
+    src="/images/bsp-ot-a-first-look/1d_ot.png"
+    ></figure>
+
+We moved the blue distribution slightly just for visibility but the data is indeed 1D because it lives on a line, the mapping can easily be computed by sorting both distributions and mapping in that same order!
+Sliced OT uses this fact and, to summarize it really crudely, rather than brute forcing the Wasserstein distance, it projects our distributions on multiple random directions, does blazing fast 1D OT and compute an integral approximation of the Wasserstein distance using Monte Carlo. (See Cuturi&rsquo;s book or the more recent <a href="https://arxiv.org/pdf/2508.12519"  target="_blank" rel="noreferrer">https://arxiv.org/pdf/2508.12519</a> if you want a less butchered explanation). The thing with Sliced OT -that the BSP OT paper mentions- is while it is great to approximate Wasserstein distances, it is not providing easily a transport plan (what we are after) between our distributions and that&rsquo;s quite annoying to us</p>
+<p>On a side note, I always found the relationship between Optimal Transport and sorting quite fascinating (big fan of this paper that uses OT to provide a Differentiable Sorting algorithm: <a href="https://arxiv.org/pdf/1905.11885"  target="_blank" rel="noreferrer">https://arxiv.org/pdf/1905.11885</a>) and you can find this relationship again in the BSP-OT at multiple places!</p>
+
+<h2 class="relative group">BSP OT: bijective case
+    <div id="bsp-ot-bijective-case-1" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#bsp-ot-bijective-case-1" aria-label="Anchor">#</a>
+    </span>
+    
+</h2>
+<p>Let&rsquo;s finally come to the BSP OT algorithm in the bijective case (aka, same number of points in the original and the target geometries). The idea behind it is kind of simple:</p>
+<ul>
+<li>Generate multiple transport plans</li>
+<li>Look at all the transport plans and combine them to get a better one</li>
+</ul>
+<p>Eventually, if the original transport plans are not too bad, quick to compute and we have a solid plan to combine them efficiently, we should get a fast and decent result, shouldn&rsquo;t we? Though those conditions are not that obvious and that&rsquo;s where the BSP trees come to play.</p>
+
+<h3 class="relative group">Binary Space Partitioning
+    <div id="binary-space-partitioning" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#binary-space-partitioning" aria-label="Anchor">#</a>
+    </span>
+    
+</h3>
+<p>BSP stands for Binary Space Partitioning, it is a Divide and Conquer type algorithm: hopefully, you will see how closely it is related to sorting after reading all of this! And if you ever built kd-trees/octrees, this will sound very familiar to you too!
+The procedure is as follow:</p>
+<ul>
+<li>We pick a direction randomly, we project all our points along that direction and use this to split each Point Set in two cells, based on that same direction (see below). The idea behind this is that a purple point from the square should eventually be mapped to a purple point of the circle (same with green)
+<figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="low"
+    alt="BSP Step 1"
+    src="/images/bsp-ot-a-first-look/bsp_step1.png"
+    ></figure>
+</li>
+<li>For each Cell, we repeat the same procedure but with a different random direction (can be different for each cell)
+<figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="low"
+    alt="BSP Step 2"
+    src="/images/bsp-ot-a-first-look/bsp_step2.png"
+    ></figure>
+</li>
+<li>We continue until we only have cells containing a single point! The mapping is then obvious: a point is mapped to the point of the corresponding cell in the other Point Set!
+<figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="low"
+    alt="BSP Matching"
+    src="/images/bsp-ot-a-first-look/bsp_matching.gif"
+    ></figure>
+</li>
+</ul>
+<p>Speaking (always!) about sorting, notice how picking systematically the same direction would be equivalent of doing a 1D sort!</p>
+<p>The Houdini implementation is quite straightforward:
+<figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="low"
+    alt="BSP Pseudo"
+    src="/images/bsp-ot-a-first-look/bsp_matching_pseudoalgo.png"
+    ></figure>
+</p>
+<p>To facilitate the For Loop iteration we merge both point clouds in a single stream. Both branches are the exact same procedure to make sure the Point Clouds are splitted the same way. We first compute the dot product against the given direction like this (notice how the cell name is used as a seed to allow constant shuffling of the randomization):</p>
+<div class="highlight-wrapper"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>// compute dot product
+</span></span><span style="display:flex;"><span>int iteration = detail(1,&#39;iteration&#39;);
+</span></span><span style="display:flex;"><span>float cell_rand = random_shash(s@cell_name)*0.2;
+</span></span><span style="display:flex;"><span>float iter_rand = random(iteration);
+</span></span><span style="display:flex;"><span>vector dir = sample_direction_uniform(set(cell_rand, iter_rand));
+</span></span><span style="display:flex;"><span>f@__dot = dot(v@P, dir);</span></span></code></pre></div></div>
+<p>Then, once sorted, we can safely break our cells into subcells like this:</p>
+<div class="highlight-wrapper"><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>// find your id within your cell
+</span></span><span style="display:flex;"><span>int ids[] = findattribval(0,&#39;point&#39;,&#39;cell_name&#39;,s@cell_name);
+</span></span><span style="display:flex;"><span>int N_cell = len(ids);
+</span></span><span style="display:flex;"><span>int myId = find(ids,@ptnum);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// Cut through the middle
+</span></span><span style="display:flex;"><span>// the way we&#39;re encoding our cells is by naming them using binary numbers
+</span></span><span style="display:flex;"><span>if(myId &lt; floor(0.5 * N_cell))  s@cell_name += &#39;0&#39;;
+</span></span><span style="display:flex;"><span>else    s@cell_name += &#39;1&#39;;</span></span></code></pre></div></div>
+<p>At the end of the day, two points mapped share the same <code>cell_name</code></p>
+
+<h3 class="relative group">Merging Two Transport Plans
+    <div id="merging-two-transport-plans" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#merging-two-transport-plans" aria-label="Anchor">#</a>
+    </span>
+    
+</h3>
+<p>Now that we are able to generate multiple plans, the goal is to improve on them by merging them with a procedure. There are two main strategies that are used by the paper to do it:</p>
+<ul>
+<li>the obvious one is by doing greedy swaps: we can compare two assignments, if one is better than the other then we pick that one instead. One catch with this one though: since we need to maintain the bijectivity (one point is mapped to <strong>exactly</strong> one point) doing a swap means in reality comparing the result of 2 swaps</li>
+<li>sometimes, some swaps involve more than just two combinations: the paper notices that we can cluster two graphs into connected components. See those two different transport plans:</li>
+</ul>
+<p><figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="low"
+    alt="BSP Start"
+    src="/images/bsp-ot-a-first-look/bsp_matching_start.png"
+    ></figure>
+</p>
+<p>If you superpose them you will see some connected components appear:
+<figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="low"
+    alt="BSP CC"
+    src="/images/bsp-ot-a-first-look/bsp_merging_CC.png"
+    ></figure>
+</p>
+<p>The ones that appear all red are actually just superposed (red and blue) and got the same assignment. However the bigger ones are the ones that involve more work: we will choose the color that works the best and then performs locally greedy swaps to try to improve them. In our scenario, blue is always better but we can imagine other scenarios where some red are better and some blue are better, leading to a global improvement of our plan!</p>
+<p>As a result, here is what happens when merging multiple trees: you can see that the overall plan improves quite quickly:
+<figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="low"
+    alt="BSP Merging"
+    src="/images/bsp-ot-a-first-look/bsp_merging_timelapse.gif"
+    ></figure>
+</p>
+<p>And that&rsquo;s all! Regarding the Houdini implementation we just have to add a little network under our previous BSP Matching and incorporate everything in a for-loop (for adding and comparing to a new tree sequentially):
+<figure><img
+    class="my-0 rounded-md"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="low"
+    alt="BSP Merging"
+    src="/images/bsp-ot-a-first-look/houdini_bsp_ot.png"
+    ></figure>
+</p>
+<p>We first need to identify the Connected Components (SOP Connectivity is great for that so we just have to create the wirings similarly to the figure above), then we run the greedy improvements on those Connected Components and voila!</p>
+
+<h3 class="relative group">Moving forward
+    <div id="moving-forward" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 -start-6 not-prose group-hover:opacity-100 select-none">
+        <a class="text-primary-300 dark:text-neutral-700 !no-underline" href="#moving-forward" aria-label="Anchor">#</a>
+    </span>
+    
+</h3>
+<p>The paper proposes multiple ameliorations: better strategies of picking directions (rather than a stupid completely random) and covering the Unbalanced case which is quite more involved. But that&rsquo;s enough for this article as it is already becoming quite long!</p>
+
+          
+          
+          
+        </div>
+        
+        
+
+        
+
+        
+
+      </div>
+    </section>
+
+    
+    <footer class="pt-8 max-w-prose print:hidden">
+      
+  
+
+
+      
+
+    </footer>
+  </article>
+
+        
+
+
+  
+
+
+
+
+
+
+<div
+  id="scroll-to-top"
+  class="fixed bottom-6 end-6 z-50 transform translate-y-4 opacity-0 duration-200">
+  <a
+    href="#the-top"
+    class="pointer-events-auto flex h-12 w-12 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+    aria-label="Scroll to top"
+    title="Scroll to top">
+    &uarr;
+  </a>
+</div>
+
+      </main><footer id="site-footer" class="py-10 print:hidden">
+  
+  
+    
+  
+  <div class="flex items-center justify-between">
+    
+    
+      <p class="text-sm text-neutral-500 dark:text-neutral-400">
+          &copy;
+          2026
+          Nico Nghiem
+      </p>
+    
+
+    
+    
+      <p class="text-xs text-neutral-500 dark:text-neutral-400">
+        
+        
+        Powered by <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+          href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> &amp; <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+          href="https://blowfish.page/" target="_blank" rel="noopener noreferrer">Blowfish</a>
+      </p>
+    
+  </div>
+  
+  
+</footer>
+<div
+  id="search-wrapper"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Search"
+  class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh] z-500"
+  data-url="/">
+  <div
+    id="search-modal"
+    class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800">
+    <header class="relative z-10 flex items-center justify-between flex-none px-2">
+      <form class="flex items-center flex-auto min-w-0">
+        <div class="flex items-center justify-center w-8 h-8 text-neutral-400">
+          <span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span>
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          aria-label="Search"
+          class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="Search"
+          tabindex="0">
+      </form>
+      <button
+        id="close-search-button"
+        class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="Close (Esc)">
+        <span class="relative block icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+</span>
+      </button>
+    </header>
+    <section class="flex-auto px-2 overflow-auto">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+    </div>
+    
+    
+  </body>
+  
+</html>

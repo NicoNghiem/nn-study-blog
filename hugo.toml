@@ -1,0 +1,14 @@
+baseURL = "https://example.com/"
+languageCode = "en-us"
+title = "Nico's Study Notes"
+theme = "blowfish"
+
+[outputs]
+  home = ["HTML", "RSS"]
+
+[params]
+  description = "Writing about what I'm learning"
+  showPostSummary = true
+  
+  [params.author]
+    name = "Nico Nghiem"
