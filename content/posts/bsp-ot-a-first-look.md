@@ -1,13 +1,13 @@
 +++
 date = '2026-08-30T16:16:23+01:00'
 draft = false
-title = 'Learning Something: BSP-OT'
+title = 'Learning Something Today: BSP-OT'
 tags = ["Optimal Transport", "Computer Graphics"]
 +++
 
 This post is the first (of hopefully many) where I will go through the steps of reading/understanding/implementing a paper I'm reading. Since I am just a mere Technical Artist (and just a Crowds peasant on top of that, not even a FX smartass!), that process will probably be quite bumpy but it might be interesting to some, or at least to me, so that I can put my thoughts in order. Expect quite a few rants about conceptual aspects I find beautiful but do not fully grasp yet. Feel free to contact me (or correct me!) any time, you know where to find me -> niconghiem@gmail.com
 
-Today's topic is the BSP OT paper by Genest et al. submitted at SIGGRAPH Asia 2025, that you can find over there:  https://dl.acm.org/doi/10.1145/3763281 Our goal will be to implement a first version of the BSP-OT paper in the bijective case (which corresponds to Section 3.) I will add a full Houdini implementation on Github later on with a Houdini native approach and one using the HDK for speed.
+Today's topic is the BSP OT paper by Genest et al. submitted at SIGGRAPH Asia 2025, that you can find over there:  https://dl.acm.org/doi/10.1145/3763281 Our goal will be to implement a first version of the BSP-OT paper in the bijective case (which corresponds to Section 3.) Please refer to this for the Houdini files (both HDA and scene file) https://github.com/NicoNghiem/nn-hda-collection/tree/main/bsp-ot
 
 
 # BSP OT bijective case
