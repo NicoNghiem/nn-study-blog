@@ -9,6 +9,7 @@ theme = "blowfish"
 [params]
   description = "Writing about what I'm learning"
   showPostSummary = true
+  recentPostsCount = 10
   
   [params.author]
     name = "Nico Nghiem"
